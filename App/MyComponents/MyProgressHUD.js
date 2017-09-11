@@ -41,7 +41,12 @@ export default class MyProgressHUD extends Component {
     //  不带图标的提示
     showTipMsgWithDuration(msg) {
         this.setState({textOnly: true});
-        this.baseShow(msg, 0);
+        this.baseShow(msg, 1500);
+    }
+
+    // 让提示框消失
+    dismiss(){
+        this.hud.close();
     }
 
     render() {

@@ -4,15 +4,19 @@
 
 import './RequestHeader'
 
-export default loginReqModel = {
+const loginReqModel = (phoneNum,veriCode)=>{
+    return {
+        header:GLOBAL.REQUEST_HEADER,
+        body:{
+            telno:phoneNum,
+            verifyCode:veriCode,
+            type:'1',
+            password:'',
+        },
+    }
+};
 
 
-
-    reqBody:{
-        telno:'',
-        verifyCode:'',
-        type:'1',
-        password:'',
-    },
-    // responseBody:{},
-}
+export default {
+    loginReqModel,
+};

@@ -33,6 +33,7 @@ const busBgIco = require('../srcImg/首页/index_bg.png');//466*246
 
 export default class Home extends Component {
     render() {
+
         return (
             <View style={styles.container}>
                 <TopViewTitleArea nav={this.props.navigation}/>

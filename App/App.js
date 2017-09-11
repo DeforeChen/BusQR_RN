@@ -16,6 +16,10 @@ import MsgDetail from './Views/MsgDetails'
 import TransDetail from './Views/TransDetails'
 import QRGenerator from './Views/PaycodeGenerator'
 
+const judgeWhetherLogin = () => {
+    return true;
+};
+
 const nav = StackNavigator({
     Home: {
         screen: Home, // 屏幕的组件链接
@@ -28,11 +32,11 @@ const nav = StackNavigator({
     Login: {screen: Login}, // 登录
     Certi: {screen: Certi}, // 实名认证
     PersonInfo: {screen: PersonInfo}, // 个人信息
-    MsgDetail:{screen: MsgDetail},
-    TransDetail:{screen:TransDetail},
-    QRGenerator:{screen:QRGenerator},
+    MsgDetail: {screen: MsgDetail},
+    TransDetail: {screen: TransDetail},
+    QRGenerator: {screen: QRGenerator},
 }, {
-    initialRouteName: 'Login', // 默认显示界面
+    initialRouteName: judgeWhetherLogin()?'Login':'Home', // 默认显示界面 'Home'
     mode: 'card',  // 页面切换模式, 左右是card(相当于iOS中的push效果), 上下是modal(相当于iOS中的modal效果)
     headerMode: 'screen',
     navigationOptions: {
@@ -43,7 +47,7 @@ const nav = StackNavigator({
         headerTintColor: '#777777',//返回按键的颜色
         headerStyle: {backgroundColor: 'white',},// 导航条背景色/长宽等
         headerBackTitle: '',
-        allowFontScaling:false,
+        allowFontScaling: false,
     },
     onTransitionStart: () => {
         console.log('导航栏切换开始');

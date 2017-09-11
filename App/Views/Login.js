@@ -18,10 +18,9 @@ import MyButton from '../MyComponents/MyButton'
 import MyHud from '../MyComponents/MyProgressHUD'
 import RegEx from '../util/RegEx'
 
-// import HUD from 'react-native-root-toast'
-
-import '../Network/RequestHeader'
 import '../Network/MyURL'
+import SysReqUtil from '../Network/SysHttpRequest'
+import LoginModel from '../Network/LoginModel'
 
 const {width, height} = Dimensions.get('window');
 
@@ -47,6 +46,23 @@ export default class Login extends Component {
         header: null,
     };
 
+    // 登录或注册
+    registerOrLogin() {
+        let phoneNum = this.state.phoneNum;
+        let code = this.state.veriCode;
+        SysReqUtil.request(URL.LOGIN_URL, LoginModel.loginReqModel(phoneNum, code),
+            () => {
+                this.hud.showLoadingMsgWithDuration('登录中,请稍候...', 0);
+            },
+            (retData) => { // 成功回调
+                this.hud.showTipMsgWithDuration(retData.header.retDesc);
+            },
+            (errMsg) => {
+                this.hud.showTipMsgWithDuration(errMsg);
+            }
+        );
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -66,31 +82,14 @@ export default class Login extends Component {
                               if (RegEx.isPhoneNumber(this.state.phoneNum) === true && this.state.phoneNum.length === 11) {
                                   if (RegEx.isInteger(this.state.veriCode) === true && this.state.veriCode.length === 6) {
                                       console.log('验证码输入正确');
+                                      // 大有可为
+                                      this.registerOrLogin();
+
                                   } else {
                                       this.hud.showTipMsgWithDuration('请输入正确的验证码');
                                   }
                               } else {
                                   this.hud.showTipMsgWithDuration('请输入正确的手机号!');
-                                  // let toast = Toast.show('This is a message', {
-                                  //     duration: Toast.durations.LONG,
-                                  //     position: Toast.positions.BOTTOM,
-                                  //     shadow: true,
-                                  //     animation: true,
-                                  //     hideOnPress: false,
-                                  //     delay: 0,
-                                  //     onShow: () => {
-                                  //         // calls on toast\`s appear animation start
-                                  //     },
-                                  //     onShown: () => {
-                                  //         // calls on toast\`s appear animation end.
-                                  //     },
-                                  //     onHide: () => {
-                                  //         // calls on toast\`s hide animation start.
-                                  //     },
-                                  //     onHidden: () => {
-                                  //         // calls on toast\`s hide animation end.
-                                  //     }
-                                  // });
                               }
                           }}
                 />
@@ -143,7 +142,6 @@ class PhoneNoInput extends Component {
                                    this.props.onEndPhoneInput(input);
                                    console.log('完成输入');
                                }
-
                            }}
                 />
             </View>
@@ -165,10 +163,8 @@ class VeriCodeInput extends Component {
 
     // 若输入为空，就恢复成默认
     checkWhetherEmptyInput() {
-        if (this.state.veriCode.length === 0) {
+        if (this.state.veriCode.length === 0)
             this.setState({veriCodeImg: veriCodeIco});
-        } else
-            this.props.onEndVeriCodeInput(this.state.veriCode);
     }
 
     // 定时器
@@ -206,6 +202,10 @@ class VeriCodeInput extends Component {
                            }}
                            onChangeText={(input) => {
                                this.setState({veriCode: input});
+                               if (input.length === 6) {//表示完成输入
+                                   this.props.onEndVeriCodeInput(input);
+                                   console.log('完成验证码输入');
+                               }
                            }}
                 />
                 <View style={{width: 1, height: 34 / 667 * height, backgroundColor: '#D9D9D9',}}/>
