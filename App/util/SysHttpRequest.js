@@ -22,7 +22,10 @@ export default class SysHttpRequest extends Component {
             .then((response) => response.json())//将数据转成json,也可以转成 response.text、response.html
             .then((responseJson) => {//获取转化后的数据responseJson、responseText、responseHtml
                 //成功回调
-                callBackSuccess(responseJson); //JSON.stringify()避免出现烦人的[object object]
+                if (responseJson.header.retCode === 0)
+                    callBackSuccess(responseJson.body); //JSON.stringify()避免出现烦人的[object object]
+                else
+                    callBackError(responseJson.header.retDesc);
             })
             .catch((error) => {
                 callBackError(error.message);

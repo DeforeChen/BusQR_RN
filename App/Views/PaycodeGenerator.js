@@ -15,7 +15,7 @@ import Props from 'prop-types';
 import CustomNav from '../MyComponents/CustomNavBar'
 import RefreshBtn from '../MyComponents/MyButton'
 import QRCode from '../MyComponents/qrcodeGenerator'
-import MyHUD from '../MyComponents/MyProgressHUD'
+import MyHUD from '../util/MyProgressHUD'
 
 const {width, height} = Dimensions.get('window');
 
