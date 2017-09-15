@@ -15,11 +15,13 @@ import {
 
 import baseStyle from '../BaseStyles'
 import MyButton from '../MyComponents/MyButton'
-import MyHud from '../MyComponents/MyProgressHUD'
+import MyHud from '../util/MyProgressHUD'
 import RegEx from '../util/RegEx'
+import DataUtil from '../util/DataPersistUtil'
+import DeviceID from '../util/DeviceInfoUtil'
 
 import '../Network/MyURL'
-import SysReqUtil from '../Network/SysHttpRequest'
+import SysReqUtil from '../util/SysHttpRequest'
 import LoginModel from '../Network/LoginModel'
 
 const {width, height} = Dimensions.get('window');
@@ -33,6 +35,7 @@ const veriCodeSelIco = require('../srcImg/Login/code_selected.png');//44*44
 
 const busBgIco = require('../srcImg/首页/index_bg.png');//466*246
 
+var phoneDeviceID = '';
 export default class Login extends Component {
     constructor(props) {
         super(props);
@@ -46,16 +49,27 @@ export default class Login extends Component {
         header: null,
     };
 
+    componentWillMount() {
+        console.log("Device Unique ID" + DeviceID.fetchDeviceID());
+        phoneDeviceID = DeviceID.fetchDeviceID();
+    }
+
     // 登录或注册
     registerOrLogin() {
         let phoneNum = this.state.phoneNum;
         let code = this.state.veriCode;
-        SysReqUtil.request(URL.LOGIN_URL, LoginModel.loginReqModel(phoneNum, code),
+        let deviceID = DeviceID.fetchDeviceID();
+        console.log('设备信息 =' + deviceID );
+        SysReqUtil.request(URL.LOGIN_URL, LoginModel.loginReqModel(phoneNum, code, phoneDeviceID),
             () => {
                 this.hud.showLoadingMsgWithDuration('登录中,请稍候...', 0);
             },
             (retData) => { // 成功回调
-                this.hud.showTipMsgWithDuration(retData.header.retDesc);
+                let loginInfo = retData;
+                loginInfo.phoneNum = this.state.phoneNum;
+                DataUtil.save('LoginInfo',loginInfo);
+                this.hud.dismiss();
+                this.props.navigation.navigate('Home');
             },
             (errMsg) => {
                 this.hud.showTipMsgWithDuration(errMsg);
@@ -93,6 +107,15 @@ export default class Login extends Component {
                               }
                           }}
                 />
+                <TouchableOpacity style={styles.input} onPress={() => {
+                    DataUtil.load('LoginInfo',
+                        (num,retData) => {
+                            console.log('读取到的信息 =' + JSON.stringify(retData));
+                        }
+                )
+                }}>
+                    <Text> 读 </Text>
+                </TouchableOpacity>
 
                 <MyHud ref={r => {
                     this.hud = r

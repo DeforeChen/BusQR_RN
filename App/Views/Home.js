@@ -12,35 +12,34 @@ import {
     Platform,
     Image,
 } from 'react-native';
-
+import DataUtil from '../util/DataPersistUtil'
 import BaseStyles from '../BaseStyles'
 
 const {width, height} = Dimensions.get('window');
 const btnHeight = 40 / 667 * height;
 
 const userIco = require('../srcImg/首页/user_ico.png');
-const busIco = require('../srcImg/首页/bus.png');
-const msgIco = require('../srcImg/首页/message_ico.png');
+const busIco  = require('../srcImg/首页/bus.png');
+const msgIco  = require('../srcImg/首页/message_ico.png');
 
-const qrIco = require('../srcImg/首页/qr_ico.png');//52*52
+const qrIco      = require('../srcImg/首页/qr_ico.png');//52*52
 const rechargIco = require('../srcImg/首页/recharge_ico.png');//54*58
-const detailIco = require('../srcImg/首页/detail_ico.png');//64*58
+const detailIco  = require('../srcImg/首页/detail_ico.png');//64*58
 
-const walletIco = require('../srcImg/首页/wallet_bg.png');//86*122
+const walletIco   = require('../srcImg/首页/wallet_bg.png');//86*122
 const detailBgIco = require('../srcImg/首页/detail_bg.png');//50*50
 
 const busBgIco = require('../srcImg/首页/index_bg.png');//466*246
 
 export default class Home extends Component {
     render() {
-
         return (
             <View style={styles.container}>
-                <TopViewTitleArea nav={this.props.navigation}/>
-                <TopViewFunction nav={this.props.navigation}/>
-                <WalletView nav={this.props.navigation}/>
-                <TransDetails nav={this.props.navigation}/>
-                <Image style={styles.busImg} source={busBgIco}/>
+                <TopViewTitleArea nav = {this.props.navigation}/>
+                <TopViewFunction nav  = {this.props.navigation}/>
+                <WalletView nav       = {this.props.navigation}/>
+                <TransDetails nav     = {this.props.navigation}/>
+                <Image style          = {styles.busImg} source = {busBgIco}/>
             </View>
         );
     }
@@ -57,20 +56,20 @@ class TopViewTitleArea extends Component {
                     width: busImgWidth, height: busImgWidth, //backgroundColor:'red',
                     justifyContent: 'flex-end', marginLeft: 20
                 }}
-                                  onPress={() => {
-                                      this.props.nav.navigate('PersonInfo')
+                                  onPress = {() => {
+                                      this.props.nav.navigate('PersonInfo');
                                   }}
                 >
                     <Image
-                        style={{width: 26, height: 26,}}
-                        source={userIco}
+                        style  = {{width: 26, height: 26,}}
+                        source = {userIco}
                     />
                 </TouchableOpacity>
                 {/*标题*/}
                 <View style={styles.titleView}>
                     <Image
-                        style={{width: 24, height: 25,}}
-                        source={busIco}
+                        style  = {{width: 24, height: 25,}}
+                        source = {busIco}
                     />
                     <Text style={[BaseStyles.regularFont, styles.textStyle]} allowFontScaling={false}>码上公交</Text>
                 </View>
@@ -83,8 +82,8 @@ class TopViewTitleArea extends Component {
                                       this.props.nav.navigate('MsgDetail')
                                   }}>
                     <Image
-                        style={{width: 24, height: 25,}}
-                        source={msgIco}/>
+                        style  = {{width: 24, height: 25,}}
+                        source = {msgIco}/>
                 </TouchableOpacity>
             </View>
         )
@@ -93,7 +92,7 @@ class TopViewTitleArea extends Component {
 
 /* 顶部栏 - 功能区*/
 class TopViewFunction extends Component {
-    static propTypes: {
+    static propTypes = {
         nav: React.PropTypes.func.isRequired,
     };
 
@@ -137,9 +136,10 @@ class TopViewFunction extends Component {
     }
 }
 
+
 /* 钱包余额 - 功能区*/
 class WalletView extends Component {
-    static propTypes: {
+    static propTypes = {
         walletBalance: React.PropTypes.string.isRequired,
         nav: React.PropTypes.func.isRequired,
     };
@@ -155,7 +155,7 @@ class WalletView extends Component {
         return (
             <TouchableOpacity style={styles.walletView}
                               onPress={() => {
-                                  this.props.nav.navigate('Wallet')
+                                  this.props.nav.navigate('Wallet');
                               }}>
                 <View style={styles.walletViewContent}>
                     {/*左侧 显示 钱包*/}
